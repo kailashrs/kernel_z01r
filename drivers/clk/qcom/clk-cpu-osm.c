@@ -795,6 +795,7 @@ static int osm_cpufreq_cpu_init(struct cpufreq_policy *policy)
 	}
 
 	policy->cpuinfo.transition_latency = MIN_RATE_LIMIT_US;
+	policy->dvfs_possible_from_any_cpu = true;
 	policy->driver_data = c;
 	return 0;
 
