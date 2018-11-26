@@ -6168,12 +6168,7 @@ static int fg_gen3_probe(struct platform_device *pdev)
 	asus_fg_porting(chip);
 // ASUS_BSP steven1_wang: add asus fg porting ---
 
-	rc = fg_debugfs_create(chip);
-	if (rc < 0) {
-		dev_err(chip->dev, "Error in creating debugfs entries, rc:%d\n",
-			rc);
-		goto exit;
-	}
+	fg_debugfs_create(chip);
 
 	rc = fg_get_battery_voltage(chip, &volt_uv);
 	if (!rc)
