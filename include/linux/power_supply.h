@@ -320,6 +320,7 @@ enum power_supply_property {
 	POWER_SUPPLY_PROP_CYCLE_COUNTS,
 	POWER_SUPPLY_PROP_PD_QC_STATE, // ASUS_BSP: add for PD quick charge icon
 	POWER_SUPPLY_PROP_STATUS_QCOM,// ASUS_BSP: +++
+	POWER_SUPPLY_PROP_MAX
 };
 
 enum power_supply_type {
