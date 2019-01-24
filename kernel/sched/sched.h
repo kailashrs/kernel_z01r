@@ -1,4 +1,3 @@
-
 #include <linux/sched.h>
 #include <linux/sched/sysctl.h>
 #include <linux/sched/rt.h>
@@ -2703,8 +2702,6 @@ static inline int same_freq_domain(int src_cpu, int dst_cpu)
 	return cpumask_test_cpu(dst_cpu, &rq->freq_domain_cpumask);
 }
 
-#define	BOOST_KICK	0
-
 extern int sched_boost(void);
 extern int preferred_cluster(struct sched_cluster *cluster,
 						struct task_struct *p);
@@ -2761,8 +2758,6 @@ extern unsigned long thermal_cap(int cpu);
 
 extern void clear_walt_request(int cpu);
 
-extern int got_boost_kick(void);
-extern void clear_boost_kick(int cpu);
 extern enum sched_boost_policy sched_boost_policy(void);
 extern void sched_boost_parse_dt(void);
 extern void clear_ed_task(struct task_struct *p, struct rq *rq);
@@ -2899,13 +2894,6 @@ static inline int cpu_max_power_cost(int cpu)
 #endif
 
 static inline void clear_walt_request(int cpu) { }
-
-static inline int got_boost_kick(void)
-{
-	return 0;
-}
-
-static inline void clear_boost_kick(int cpu) { }
 
 static inline enum sched_boost_policy sched_boost_policy(void)
 {
