@@ -1797,7 +1797,7 @@ retry:
 				continue;
 		}
 
-		for_each_cpu_and(cpu, lowest_mask, sched_group_span(sg)) {
+		for_each_cpu_and(cpu, lowest_mask, sched_group_cpus(sg)) {
 			if (cpu_isolated(cpu))
 				continue;
 
