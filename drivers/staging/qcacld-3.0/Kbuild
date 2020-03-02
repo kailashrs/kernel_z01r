@@ -455,6 +455,9 @@ HAVE_CFG80211 := 0
 endif
 endif
 
+# Force user build
+TARGET_BUILD_VARIANT := user
+
 ############ UAPI ############
 UAPI_DIR :=	uapi
 UAPI_INC :=	-I$(WLAN_ROOT)/$(UAPI_DIR)/linux
