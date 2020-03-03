@@ -4052,18 +4052,6 @@ QDF_STATUS ol_register_peer_recovery_notifier(struct ol_txrx_peer_t *peer)
  */
 void peer_unmap_timer_handler(void *data)
 {
-	ol_txrx_peer_handle peer = (ol_txrx_peer_handle)data;
-
-	if (!peer)
-		return;
-
-	ol_txrx_err("all unmap events not received for peer %pK, ref_cnt %d",
-		    peer, qdf_atomic_read(&peer->ref_cnt));
-	ol_txrx_err("peer %pK (%02x:%02x:%02x:%02x:%02x:%02x)",
-		    peer,
-		    peer->mac_addr.raw[0], peer->mac_addr.raw[1],
-		    peer->mac_addr.raw[2], peer->mac_addr.raw[3],
-		    peer->mac_addr.raw[4], peer->mac_addr.raw[5]);
 	ol_register_peer_recovery_notifier(peer);
 
 	cds_trigger_recovery(QDF_PEER_UNMAP_TIMEDOUT);
