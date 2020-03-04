@@ -9134,17 +9134,14 @@ static QDF_STATUS send_start_oemv2_data_cmd_tlv(wmi_unified_t wmi_handle,
 	uint8_t *buf_ptr;
 
 	if (!oem_data || !oem_data->data) {
-		wmi_err_rl("oem data is not valid");
 		return QDF_STATUS_E_FAILURE;
 	}
 	oem_data_len_aligned = roundup(oem_data->data_len, sizeof(uint32_t));
 	if (oem_data_len_aligned < oem_data->data_len) {
-		wmi_err_rl("integer overflow while rounding up data_len");
 		return QDF_STATUS_E_FAILURE;
 	}
 
 	if (oem_data_len_aligned > WMI_SVC_MSG_MAX_SIZE - WMI_TLV_HDR_SIZE) {
-		wmi_err_rl("wmi_max_msg_size overflow for given data_len");
 		return QDF_STATUS_E_FAILURE;
 	}
 
@@ -9169,7 +9166,6 @@ static QDF_STATUS send_start_oemv2_data_cmd_tlv(wmi_unified_t wmi_handle,
 	wmi_mtrace(WMI_OEM_DATA_CMDID, NO_SESSION, 0);
 	ret = wmi_unified_cmd_send(wmi_handle, buf, len, WMI_OEM_DATA_CMDID);
 	if (QDF_IS_STATUS_ERROR(ret)) {
-		wmi_err_rl("Failed with ret = %d", ret);
 		wmi_buf_free(buf);
 	}
 
@@ -10388,11 +10384,6 @@ static QDF_STATUS send_regdomain_info_to_fw_cmd_tlv(wmi_unified_t wmi_handle,
 	cmd->reg_domain_5G = regdmn5G;
 	cmd->conformance_test_limit_2G = ctl2G;
 	cmd->conformance_test_limit_5G = ctl5G;
-
-	wmi_debug("regd = %x, regd_2g = %x, regd_5g = %x, ctl_2g = %x, ctl_5g = %x",
-		  cmd->reg_domain, cmd->reg_domain_2G, cmd->reg_domain_5G,
-		  cmd->conformance_test_limit_2G,
-		  cmd->conformance_test_limit_5G);
 
 	wmi_mtrace(WMI_PDEV_SET_REGDOMAIN_CMDID, NO_SESSION, 0);
 	if (wmi_unified_cmd_send(wmi_handle, buf, len,
@@ -23662,14 +23653,12 @@ static QDF_STATUS extract_ani_level_tlv(uint8_t *evt_buf,
 
 	param_buf = (WMI_GET_CHANNEL_ANI_EVENTID_param_tlvs *)evt_buf;
 	if (!param_buf) {
-		wmi_err("Invalid ani level event buffer");
 		return QDF_STATUS_E_INVAL;
 	}
 
 	fixed_param =
 		(wmi_get_channel_ani_event_fixed_param *)param_buf->fixed_param;
 	if (!fixed_param) {
-		wmi_err("Invalid fixed param");
 		return QDF_STATUS_E_INVAL;
 	}
 
@@ -23679,7 +23668,6 @@ static QDF_STATUS extract_ani_level_tlv(uint8_t *evt_buf,
 
 	*num_freqs = param_buf->num_ani_info;
 	if (*num_freqs > MAX_NUM_FREQS_FOR_ANI_LEVEL) {
-		wmi_err("Invalid number of freqs received");
 		return QDF_STATUS_E_INVAL;
 	}
 
