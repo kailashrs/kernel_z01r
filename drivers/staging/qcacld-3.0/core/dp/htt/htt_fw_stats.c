@@ -88,20 +88,6 @@ static char *bw_str_arr[] = {"20MHz", "40MHz", "80MHz", "160MHz"};
 				_tx_rate_info->nss[0],		 \
 				_tx_rate_info->nss[1], _tx_rate_info->nss[2]);\
 		\
-		/* BW */					 \
-		if (ARRAY_SIZE(_tx_rate_info->bw) == 3) \
-			qdf_nofl_info("BW counts: %s %d, %s %d, %s %d", \
-				bw_str_arr[0], _tx_rate_info->bw[0],	 \
-				bw_str_arr[1], _tx_rate_info->bw[1],	 \
-				bw_str_arr[2], _tx_rate_info->bw[2]);	 \
-		else if (ARRAY_SIZE(_tx_rate_info->bw) == 4) \
-			qdf_nofl_info("BW counts: %s %d, %s %d, %s %d, %s %d", \
-				bw_str_arr[0], _tx_rate_info->bw[0],	 \
-				bw_str_arr[1], _tx_rate_info->bw[1],	 \
-				bw_str_arr[2], _tx_rate_info->bw[2],     \
-				bw_str_arr[3], _tx_rate_info->bw[3]);	 \
-		\
-		\
 		/* Preamble */					 \
 		qdf_nofl_info("Preamble (O C H V) counts: %d, %d, %d, %d",\
 				_tx_rate_info->pream[0],		 \
@@ -204,19 +190,6 @@ static void htt_t2h_stats_tx_rate_stats_print_v2(wlan_dbg_tx_rate_info_v2_t *
 		/* NSTS */					\
 		qdf_nofl_info("NSTS count: %d", _rx_phy_info->nsts);	\
 		\
-		/* BW */					\
-		if (ARRAY_SIZE(_rx_phy_info->bw) == 3) \
-			qdf_nofl_info("BW counts: %s %d, %s %d, %s %d",	\
-				bw_str_arr[0], _rx_phy_info->bw[0],	\
-				bw_str_arr[1], _rx_phy_info->bw[1],	\
-				bw_str_arr[2], _rx_phy_info->bw[2]);	\
-		else if (ARRAY_SIZE(_rx_phy_info->bw) == 4) \
-			qdf_nofl_info("BW counts: %s %d, %s %d, %s %d, %s %d", \
-				bw_str_arr[0], _rx_phy_info->bw[0],	\
-				bw_str_arr[1], _rx_phy_info->bw[1],	\
-				bw_str_arr[2], _rx_phy_info->bw[2],    \
-				bw_str_arr[3], _rx_phy_info->bw[3]);	\
-		\
 		/* Preamble */					\
 		qdf_nofl_info("Preamble counts: %d, %d, %d, %d, %d, %d",\
 				_rx_phy_info->pream[0],		\
@@ -283,84 +256,6 @@ static void
 htt_t2h_stats_pdev_stats_print(struct wlan_dbg_stats *wlan_pdev_stats,
 			       int concise)
 {
-#ifdef WLAN_DEBUG
-	struct wlan_dbg_tx_stats *tx = &wlan_pdev_stats->tx;
-	struct wlan_dbg_rx_stats *rx = &wlan_pdev_stats->rx;
-#endif
-
-	qdf_nofl_info("WAL Pdev stats:");
-	qdf_nofl_info("\n### Tx ###");
-
-	/* Num HTT cookies queued to dispatch list */
-	qdf_nofl_info("comp_queued       :\t%d", tx->comp_queued);
-	/* Num HTT cookies dispatched */
-	qdf_nofl_info("comp_delivered    :\t%d", tx->comp_delivered);
-	/* Num MSDU queued to WAL */
-	qdf_nofl_info("msdu_enqued       :\t%d", tx->msdu_enqued);
-	/* Num MPDU queued to WAL */
-	qdf_nofl_info("mpdu_enqued       :\t%d", tx->mpdu_enqued);
-	/* Num MSDUs dropped by WMM limit */
-	qdf_nofl_info("wmm_drop          :\t%d", tx->wmm_drop);
-	/* Num Local frames queued */
-	qdf_nofl_info("local_enqued      :\t%d", tx->local_enqued);
-	/* Num Local frames done */
-	qdf_nofl_info("local_freed       :\t%d", tx->local_freed);
-	/* Num queued to HW */
-	qdf_nofl_info("hw_queued         :\t%d", tx->hw_queued);
-	/* Num PPDU reaped from HW */
-	qdf_nofl_info("hw_reaped         :\t%d", tx->hw_reaped);
-	/* Num underruns */
-	qdf_nofl_info("mac underrun      :\t%d", tx->underrun);
-	/* Num underruns */
-	qdf_nofl_info("phy underrun      :\t%d", tx->phy_underrun);
-	/* Num PPDUs cleaned up in TX abort */
-	qdf_nofl_info("tx_abort          :\t%d", tx->tx_abort);
-	/* Num MPDUs requed by SW */
-	qdf_nofl_info("mpdus_requed      :\t%d", tx->mpdus_requed);
-	/* Excessive retries */
-	qdf_nofl_info("excess retries    :\t%d", tx->tx_ko);
-	/* last data rate */
-	qdf_nofl_info("last rc           :\t%d", tx->data_rc);
-	/* scheduler self triggers */
-	qdf_nofl_info("sched self trig   :\t%d", tx->self_triggers);
-	/* SW retry failures */
-	qdf_nofl_info("ampdu retry failed:\t%d", tx->sw_retry_failure);
-	/* ilegal phy rate errirs */
-	qdf_nofl_info("illegal rate errs :\t%d", tx->illgl_rate_phy_err);
-	/* pdev continuous excessive retries  */
-	qdf_nofl_info("pdev cont xretry  :\t%d", tx->pdev_cont_xretry);
-	/* pdev continuous excessive retries  */
-	qdf_nofl_info("pdev tx timeout   :\t%d", tx->pdev_tx_timeout);
-	/* pdev resets  */
-	qdf_nofl_info("pdev resets       :\t%d", tx->pdev_resets);
-	/* PPDU > txop duration  */
-	qdf_nofl_info("ppdu txop ovf     :\t%d", tx->txop_ovf);
-
-	qdf_nofl_info("\n### Rx ###\n");
-	/* Cnts any change in ring routing mid-ppdu */
-	qdf_nofl_info("ppdu_route_change :\t%d", rx->mid_ppdu_route_change);
-	/* Total number of statuses processed */
-	qdf_nofl_info("status_rcvd       :\t%d", rx->status_rcvd);
-	/* Extra frags on rings 0-3 */
-	qdf_nofl_info("r0_frags          :\t%d", rx->r0_frags);
-	qdf_nofl_info("r1_frags          :\t%d", rx->r1_frags);
-	qdf_nofl_info("r2_frags          :\t%d", rx->r2_frags);
-	qdf_nofl_info("r3_frags          :\t%d", rx->r3_frags);
-	/* MSDUs / MPDUs delivered to HTT */
-	qdf_nofl_info("htt_msdus         :\t%d", rx->htt_msdus);
-	qdf_nofl_info("htt_mpdus         :\t%d", rx->htt_mpdus);
-	/* MSDUs / MPDUs delivered to local stack */
-	qdf_nofl_info("loc_msdus         :\t%d", rx->loc_msdus);
-	qdf_nofl_info("loc_mpdus         :\t%d", rx->loc_mpdus);
-	/* AMSDUs that have more MSDUs than the status ring size */
-	qdf_nofl_info("oversize_amsdu    :\t%d", rx->oversize_amsdu);
-	/* Number of PHY errors */
-	qdf_nofl_info("phy_errs          :\t%d", rx->phy_errs);
-	/* Number of PHY errors dropped */
-	qdf_nofl_info("phy_errs dropped  :\t%d", rx->phy_err_drop);
-	/* Number of mpdu errors - FCS, MIC, ENC etc. */
-	qdf_nofl_info("mpdu_errs         :\t%d", rx->mpdu_errs);
-
 }
 
 static void
