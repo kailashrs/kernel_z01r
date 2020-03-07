@@ -177,15 +177,6 @@ struct fts_ts_data {
 *****************************************************************************/
 extern struct fts_ts_data *fts_data;
 
-/* i2c communication*/
-int fts_i2c_write_reg(struct i2c_client *client, u8 regaddr, u8 regvalue);
-int fts_i2c_read_reg(struct i2c_client *client, u8 regaddr, u8 *regvalue);
-int fts_i2c_read(struct i2c_client *client, char *writebuf, int writelen, char *readbuf, int readlen);
-int fts_i2c_write(struct i2c_client *client, char *writebuf, int writelen);
-void fts_i2c_hid2std(struct i2c_client *client);
-int fts_i2c_init(void);
-int fts_i2c_exit(void);
-
 /* Gesture functions */
 #if FTS_GESTURE_EN
 int fts_gesture_init(struct fts_ts_data *ts_data);
@@ -247,5 +238,7 @@ int fts_ex_mode_recovery(struct i2c_client *client);
 
 void fts_irq_disable(void);
 void fts_irq_enable(void);
+
+#include "focaltech_i2c.c"
 
 #endif /* __LINUX_FOCALTECH_CORE_H__ */
