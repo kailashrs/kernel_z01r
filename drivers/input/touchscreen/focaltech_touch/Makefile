@@ -11,7 +11,6 @@ focaltech_ft8716f-objs	 := focaltech_core.o \
 							focaltech_flash.o \
 							focaltech_gesture.o \
 							focaltech_esdcheck.o \
-							focaltech_i2c.o \
 							focaltech_point_report_check.o
 
 focaltech_ft8716f-objs	 += focaltech_flash/focaltech_upgrade_ft8716.o
