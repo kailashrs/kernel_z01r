@@ -46,11 +46,6 @@
 *****************************************************************************/
 
 /*****************************************************************************
-* Static variables
-*****************************************************************************/
-static DEFINE_MUTEX(i2c_rw_access);
-
-/*****************************************************************************
 * Global variable or extern global variabls/functions
 *****************************************************************************/
 
@@ -74,8 +69,6 @@ int fts_i2c_read(struct i2c_client *client, char *writebuf, int writelen, char *
     int ret = 0;
     int i = 0;
 
-    mutex_lock(&i2c_rw_access);
-
     if (readlen > 0) {
         if (writelen > 0) {
             struct i2c_msg msgs[] = {
@@ -97,7 +90,6 @@ int fts_i2c_read(struct i2c_client *client, char *writebuf, int writelen, char *
                 if (ret < 0) {
                     FTS_ERROR("[IIC]: i2c_transfer(write) error, ret=%d!!", ret);
                     if(-ETIMEDOUT == ret){
-                        mutex_unlock(&i2c_rw_access);
                         return ret;
 					}
                 } else
@@ -117,7 +109,6 @@ int fts_i2c_read(struct i2c_client *client, char *writebuf, int writelen, char *
                 if (ret < 0) {
                     FTS_ERROR("[IIC]: i2c_transfer(read) error, ret=%d!!", ret);
                     if(-ETIMEDOUT == ret){
-                        mutex_unlock(&i2c_rw_access);
                         return ret;
 					}
                 } else
@@ -126,7 +117,6 @@ int fts_i2c_read(struct i2c_client *client, char *writebuf, int writelen, char *
         }
     }
 
-    mutex_unlock(&i2c_rw_access);
     return ret;
 }
 
@@ -142,7 +132,6 @@ int fts_i2c_write(struct i2c_client *client, char *writebuf, int writelen)
     int ret = 0;
     int i = 0;
 
-    mutex_lock(&i2c_rw_access);
     if (writelen > 0) {
         struct i2c_msg msgs[] = {
             {
@@ -157,15 +146,12 @@ int fts_i2c_write(struct i2c_client *client, char *writebuf, int writelen)
             if (ret < 0) {
                 FTS_ERROR("%s: i2c_transfer(write) error, ret=%d", __func__, ret);
                 if(-ETIMEDOUT == ret){
-                    mutex_unlock(&i2c_rw_access);
                     return ret;
 				}
             } else
                 break;
         }
     }
-    mutex_unlock(&i2c_rw_access);
-
     return ret;
 }
 
