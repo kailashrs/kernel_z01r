@@ -920,7 +920,7 @@ static int fts_read_touchdata(struct fts_ts_data *data)
     buf[0] = 0x00;
 
     ret = fts_i2c_read(data->client, buf, 1, buf, data->pnt_buf_size);
-    if (ret < 0) {
+    if (unlikely(ret < 0)) {
         FTS_ERROR("read touchdata failed, ret:%d", ret);
         return ret;
     }
@@ -961,7 +961,7 @@ static int fts_read_touchdata(struct fts_ts_data *data)
             return -EIO;
         }
     }
-    if (data->touch_point == 0) {
+    if (unlikely(data->touch_point == 0)) {
         FTS_INFO("no touch point information");
         return -EIO;
     }
@@ -1001,7 +1001,7 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
     int ret = 0;
     struct fts_ts_data *ts_data = (struct fts_ts_data *)data;
 
-    if (!ts_data) {
+    if (unlikely(!ts_data)) {
         FTS_ERROR("[INTR]: Invalid fts_ts_data");
         return IRQ_HANDLED;
     }
@@ -1010,14 +1010,14 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
     fts_esdcheck_set_intr(1);
 #endif
 
-	//add wake lock
-	wake_lock_timeout(&fts_wakelock, msecs_to_jiffies(WAKELOCK_HOLD_TIME));
+    //add wake lock
+    wake_lock_timeout(&fts_wakelock, msecs_to_jiffies(WAKELOCK_HOLD_TIME));
 
     ret = fts_read_touchdata(ts_data);
-    if (ret == 0) {
-        mutex_lock(&ts_data->report_mutex);
-        fts_report_event(ts_data);
-        mutex_unlock(&ts_data->report_mutex);
+    if (likely(ret == 0)) {
+    	  mutex_lock(&ts_data->report_mutex);
+    	  fts_report_event(ts_data);
+    	  mutex_unlock(&ts_data->report_mutex);
     }
 
 #if FTS_ESDCHECK_EN
