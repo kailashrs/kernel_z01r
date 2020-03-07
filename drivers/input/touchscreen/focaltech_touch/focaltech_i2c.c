@@ -62,7 +62,7 @@
 static inline int fts_i2c_read(struct i2c_client *client, char *writebuf, int writelen, char *readbuf, int readlen)
 {
     int ret = 0;
-    int i = 0;
+    int i;
 
     if (readlen > 0) {
         if (writelen > 0) {
@@ -125,7 +125,7 @@ static inline int fts_i2c_read(struct i2c_client *client, char *writebuf, int wr
 static inline int fts_i2c_write(struct i2c_client *client, char *writebuf, int writelen)
 {
     int ret = 0;
-    int i = 0;
+    int i;
 
     if (writelen > 0) {
         struct i2c_msg msgs[] = {
@@ -159,7 +159,7 @@ static inline int fts_i2c_write(struct i2c_client *client, char *writebuf, int w
 ***********************************************************************/
 static inline int fts_i2c_write_reg(struct i2c_client *client, u8 regaddr, u8 regvalue)
 {
-    u8 buf[2] = {0};
+    u8 buf[2];
 
     buf[0] = regaddr;
     buf[1] = regvalue;
@@ -183,7 +183,7 @@ static inline int fts_i2c_read_reg(struct i2c_client *client, u8 regaddr, u8 *re
 ***********************************************************************/
 static inline void fts_i2c_hid2std(struct i2c_client *client)
 {
-    int ret = 0;
+    int ret;
     u8 buf[3] = {0xeb, 0xaa, 0x09};
 
     ret = fts_i2c_write(client, buf, 3);
