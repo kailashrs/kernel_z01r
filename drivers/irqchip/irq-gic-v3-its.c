@@ -1641,7 +1641,7 @@ static void its_enable_quirks(struct its_node *its)
 	gic_enable_quirks(iidr, its_quirks, its);
 }
 
-static int its_init_domain(struct fwnode_handle *handle, struct its_node *its)
+static int __init its_init_domain(struct fwnode_handle *handle, struct its_node *its)
 {
 	struct irq_domain *inner_domain;
 	struct msi_domain_info *info;
