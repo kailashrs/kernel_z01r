@@ -25,7 +25,7 @@ GIT_VERSION=$(shell cd $(PLMA_HOSTSW_DIR); git describe --tags --dirty --match "
 EXTRA_CFLAGS += -DTFA98XX_GIT_VERSIONS=\"$(GIT_VERSION)\"
 
 # debugging support (also enables trace_printk)
-EXTRA_CFLAGS += -DDEBUG -DTFA9874_NONDSP_STEREO
+EXTRA_CFLAGS += -DTFA9874_NONDSP_STEREO
 
 EXTRA_CFLAGS += -I$(src)/inc
 EXTRA_CFLAGS += -Werror
