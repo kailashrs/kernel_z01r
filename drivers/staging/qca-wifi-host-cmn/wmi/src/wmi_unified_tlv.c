@@ -6512,7 +6512,6 @@ static QDF_STATUS send_roam_scan_offload_mode_cmd_tlv(wmi_unified_t wmi_handle,
 #endif /* WLAN_FEATURE_ROAM_OFFLOAD */
 	      sizeof(wmi_start_scan_cmd_fixed_param);
 #ifdef WLAN_FEATURE_ROAM_OFFLOAD
-	wmi_debug("auth_mode = %d", auth_mode);
 		if (roam_req->is_roam_req_valid &&
 				roam_req->roam_offload_enabled) {
 			len += sizeof(wmi_roam_offload_tlv_param);
@@ -10584,37 +10583,6 @@ static QDF_STATUS send_update_fw_tdls_state_cmd_tlv(wmi_unified_t wmi_handle,
 		wmi_tdls->tdls_peer_kickout_threshold;
 	cmd->tdls_discovery_wake_timeout =
 		wmi_tdls->tdls_discovery_wake_timeout;
-
-	wmi_debug("vdev %d tdls_state: %d, state: %d, "
-		 "notification_interval_ms: %d, "
-		 "tx_discovery_threshold: %d, "
-		 "tx_teardown_threshold: %d, "
-		 "rssi_teardown_threshold: %d, "
-		 "rssi_delta: %d, "
-		 "tdls_options: 0x%x, "
-		 "tdls_peer_traffic_ind_window: %d, "
-		 "tdls_peer_traffic_response_timeout: %d, "
-		 "tdls_puapsd_mask: 0x%x, "
-		 "tdls_puapsd_inactivity_time: %d, "
-		 "tdls_puapsd_rx_frame_threshold: %d, "
-		 "teardown_notification_ms: %d, "
-		 "tdls_peer_kickout_threshold: %d, "
-		 "tdls_discovery_wake_timeout: %d",
-		  wmi_tdls->vdev_id, tdls_state, cmd->state,
-		 cmd->notification_interval_ms,
-		 cmd->tx_discovery_threshold,
-		 cmd->tx_teardown_threshold,
-		 cmd->rssi_teardown_threshold,
-		 cmd->rssi_delta,
-		 cmd->tdls_options,
-		 cmd->tdls_peer_traffic_ind_window,
-		 cmd->tdls_peer_traffic_response_timeout_ms,
-		 cmd->tdls_puapsd_mask,
-		 cmd->tdls_puapsd_inactivity_time_ms,
-		 cmd->tdls_puapsd_rx_frame_threshold,
-		 cmd->teardown_notification_ms,
-		 cmd->tdls_peer_kickout_threshold,
-		 cmd->tdls_discovery_wake_timeout);
 
 	wmi_mtrace(WMI_TDLS_SET_STATE_CMDID, cmd->vdev_id, 0);
 	if (wmi_unified_cmd_send(wmi_handle, wmi_buf, len,
@@ -16478,9 +16446,6 @@ static QDF_STATUS send_roam_scan_offload_rssi_change_cmd_tlv(wmi_unified_t wmi_h
 			status);
 		goto error;
 	}
-
-	wmi_debug("roam_scan_rssi_change_thresh %d, bcn_rssi_weight %dhirssi_delay_btw_scans %d",
-		  rssi_change_thresh, bcn_rssi_weight, hirssi_delay_btw_scans);
 
 	return QDF_STATUS_SUCCESS;
 error:

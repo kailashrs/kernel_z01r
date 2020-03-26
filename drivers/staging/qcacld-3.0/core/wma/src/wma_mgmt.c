@@ -3182,9 +3182,6 @@ static int wma_process_mgmt_tx_completion(tp_wma_handle wma_handle,
 		return -EINVAL;
 	}
 
-	wma_debug("status: %s wmi_desc_id: %d",
-		  wma_get_status_str(status), desc_id);
-
 	pdev = wma_handle->pdev;
 	if (pdev == NULL) {
 		WMA_LOGE("%s: psoc ptr is NULL", __func__);
