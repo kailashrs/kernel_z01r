@@ -2444,9 +2444,6 @@ static QDF_STATUS sap_fsm_state_starting(struct sap_context *sap_ctx,
 		 * Transition from SAP_STARTING to SAP_STARTED
 		 * (both without substates)
 		 */
-		sap_debug("Chan %d %s => %s ch_width %d",
-			  sap_ctx->channel, "SAP_STARTING", "SAP_STARTED",
-			  sap_ctx->ch_params.ch_width);
 		sap_ctx->fsm_state = SAP_STARTED;
 
 		/* Action code for transition */
@@ -2744,8 +2741,6 @@ QDF_STATUS sap_fsm(struct sap_context *sap_ctx, ptWLAN_SAPEvent sap_event)
 	}
 
 	mac_ctx = PMAC_STRUCT(hal);
-
-	sap_debug("state=%d handle event=%d", state_var, msg);
 
 	switch (state_var) {
 	case SAP_INIT:
@@ -3233,15 +3228,9 @@ static QDF_STATUS sap_get_channel_list(struct sap_context *sap_ctx,
 	start_ch_num = sap_ctx->acs_cfg->start_ch;
 	end_ch_num = sap_ctx->acs_cfg->end_ch;
 	ch_width = sap_ctx->acs_cfg->ch_width;
-	sap_debug("startChannel %d, EndChannel %d, ch_width %d, HW:%d",
-		  start_ch_num, end_ch_num, ch_width,
-		  sap_ctx->acs_cfg->hw_mode);
 
 	wlansap_extend_to_acs_range(hal, &start_ch_num, &end_ch_num,
 					    &band_start_ch, &band_end_ch);
-
-	sap_debug("expanded startChannel %d,EndChannel %d band_start_ch %d, band_end_ch %d",
-		  start_ch_num, end_ch_num, band_start_ch, band_end_ch);
 
 	sme_cfg_get_int(hal, WNI_CFG_ENABLE_LTE_COEX, &en_lte_coex);
 
@@ -3352,16 +3341,11 @@ static QDF_STATUS sap_get_channel_list(struct sap_context *sap_ctx,
 			list[ch_count] =
 				WLAN_REG_CH_NUM(loop_count);
 			ch_count++;
-			sap_debug("%d %d added to ACS ch range", ch_count, ch);
-		    } else {
-			sap_debug("%d %d skipped from ACS ch range",
-				  ch_count, ch);
 		    }
 		} else {
 			list[ch_count] =
 				WLAN_REG_CH_NUM(loop_count);
 			ch_count++;
-			sap_debug("%d %d added to ACS ch range", ch_count, ch);
 		}
 #else
 		list[ch_count] = WLAN_REG_CH_NUM(loop_count);
