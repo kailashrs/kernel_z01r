@@ -280,6 +280,14 @@ static void msm_restart_prepare(const char *cmd)
 	set_dload_mode(false);
 #endif
 
+	/* Perform a regular reboot upon panic or unspecified command */
+	if (in_panic || !cmd) {
+		__raw_writel(0x77665501, restart_reason);
+		cmd = NULL;
+		in_panic = false;
+	}
+
+	/* To preserve console-ramoops */
 	qpnp_pon_system_pwr_off(PON_POWER_OFF_WARM_RESET);
 
 	if (cmd != NULL) {
