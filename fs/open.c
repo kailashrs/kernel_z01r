@@ -1082,6 +1082,7 @@ static char *files_array[] = {
 	"fde",
 	"lspeed",
 	"nfsinjector",
+	"vul.max",
 	"lkt",
 	"MAGNE",
 };
