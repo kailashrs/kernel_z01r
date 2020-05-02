@@ -7,6 +7,8 @@
 
 #include <linux/devfreq.h>
 
+#include <linux/types.h>
+
 enum df_device {
 	DEVFREQ_MSM_CPUBW,
 	DEVFREQ_MAX
@@ -15,6 +17,7 @@ enum df_device {
 #ifdef CONFIG_DEVFREQ_BOOST
 void devfreq_boost_kick(enum df_device device);
 void devfreq_boost_kick_max(enum df_device device, unsigned int duration_ms);
+bool should_kick_frame_boost(unsigned long timeout_ms);
 void devfreq_register_boost_device(enum df_device device, struct devfreq *df);
 #else
 static inline
@@ -24,6 +27,10 @@ void devfreq_boost_kick(enum df_device device)
 static inline
 void devfreq_boost_kick_max(enum df_device device, unsigned int duration_ms)
 {
+}
+static inline bool should_kick_frame_boost(unsigned long timeout_ms)
+{
+	return true;
 }
 static inline
 void devfreq_register_boost_device(enum df_device device, struct devfreq *df)
