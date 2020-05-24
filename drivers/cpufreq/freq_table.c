@@ -58,6 +58,9 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
 	policy->min = policy->cpuinfo.min_freq = min_freq;
 	policy->max = policy->cpuinfo.max_freq = max_freq;
 
+	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
+		policy->min = 576000;
+
 	if (policy->min == ~0)
 		return -EINVAL;
 	else
