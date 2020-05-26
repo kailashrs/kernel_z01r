@@ -727,14 +727,6 @@ static void create_asus_charger_inov_enable_proc_file(void)
         pr_err("creat charger_inov_enable proc inode failed!\n");
 }
 
-static char *usb_type_str[] = {
-    "NONE",
-    "SDP",
-    "OTHER",
-    "CDP",
-    "DCP",
-};
-
 void asus_log_chg_mode(u8 apsd_result_bit)
 {
     int chg_type = 0;
