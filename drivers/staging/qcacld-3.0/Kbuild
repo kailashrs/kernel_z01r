@@ -277,6 +277,10 @@ ifeq ($(CONFIG_DEBUG_FS), y)
        CONFIG_WLAN_DEBUGFS := y
 
        CONFIG_WLAN_POWER_DEBUGFS := y
+
+ifneq ($(CONFIG_MOBILE_ROUTER), y)
+       CONFIG_WLAN_SYSFS := y
+endif
 endif
 
 # If not set, assume, Common driver is with in the build tree
@@ -369,8 +373,6 @@ endif
 ifneq ($(CONFIG_MOBILE_ROUTER), y)
 #Enable IBSS support on CLD
 CONFIG_QCA_IBSS_SUPPORT := 1
-
-CONFIG_WLAN_SYSFS := y
 endif
 
 #Enable power management suspend/resume functionality to PCI
