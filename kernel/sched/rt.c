@@ -5,6 +5,7 @@
 
 #include "sched.h"
 #include "walt.h"
+#include "tune.h"
 
 #include <linux/interrupt.h>
 #include <linux/slab.h>
