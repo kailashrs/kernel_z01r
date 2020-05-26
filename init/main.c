@@ -187,16 +187,14 @@ EXPORT_SYMBOL(g_charger_mode);
 //[+++]ASUS : Add for COUNTRY
 bool g_Country_RU = false;
 bool g_Country_WW = false;
-static int get_country_code(char *str)
-{
-
-    if ( strcmp("RU", str) == 0 )
-        g_Country_RU = true;
-    else 
-        g_Country_WW = true;
+static int get_country_code(char *str) {
+	if ( strcmp("RU", str) == 0 )
+		g_Country_RU = true;
+	else 
+		g_Country_WW = true;
 
 	printk("COUNTRY=%s\n", str);
-    return 0;
+	return 0;
 }
 __setup("CountryCode=", get_country_code);
 EXPORT_SYMBOL(g_Country_RU);

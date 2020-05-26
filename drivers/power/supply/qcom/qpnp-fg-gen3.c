@@ -1122,7 +1122,7 @@ static int fg_get_batt_profile(struct fg_chip *chip)
                     g_bat_reload_cond < BATT_SAFETY_UPGRADE_PARAMS_COUNT) {
         chip->bp.float_volt_uv = batt_safety_upgrade_params[g_bat_reload_cond].float_voltage_uv;
         pr_info("use new battery float voltage : %d uV\n", chip->bp.float_volt_uv);
-    } else;
+        } else;
 
 	rc = of_property_read_u32(profile_node, "qcom,fastchg-current-ma",
 			&chip->bp.fastchg_curr_ma);
@@ -1140,7 +1140,7 @@ static int fg_get_batt_profile(struct fg_chip *chip)
                     g_bat_reload_cond < BATT_SAFETY_UPGRADE_PARAMS_COUNT) {
         chip->bp.vbatt_full_mv = batt_safety_upgrade_params[g_bat_reload_cond].vbat_full_mv;
         pr_info("use new vbatt full : %d mV\n", chip->bp.vbatt_full_mv);
-    } else;
+        } else;
 
 	data = of_get_property(profile_node, "qcom,fg-profile-data", &len);
 	if (!data) {
