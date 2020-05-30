@@ -3952,45 +3952,6 @@ static const struct spi_device_id mcp25xxfd_id_table[] = {
 };
 MODULE_DEVICE_TABLE(spi, mcp25xxfd_id_table);
 
-static int mcp25xxfd_dump_regs(struct seq_file *file, void *offset)
-{
-	struct spi_device *spi = file->private;
-	struct mcp25xxfd_priv *priv = spi_get_drvdata(spi);
-	u32 data[CAN_TXQUA - CAN_CON + 4];
-	int i;
-	int count;
-	int ret;
-
-	count = (CAN_TXQUA - CAN_CON) / 4 + 1;
-	ret = mcp25xxfd_cmd_readn(spi, CAN_CON, data, 4 * count,
-				  priv->spi_setup_speed_hz);
-	if (ret)
-		return ret;
-
-	mcp25xxfd_convert_to_cpu((u32 *)data, 4 * count);
-
-	for (i = 0; i < count; i++) {
-		seq_printf(file, "Reg 0x%03x = 0x%08x\n",
-			   CAN_CON + 4 * i,
-			   ((u32 *)data)[i]);
-	}
-
-	count = (MCP25XXFD_ECCSTAT - MCP25XXFD_OSC) / 4 + 1;
-	ret = mcp25xxfd_cmd_readn(spi, MCP25XXFD_OSC, data, 4 * count,
-				  priv->spi_setup_speed_hz);
-	if (ret)
-		return ret;
-	mcp25xxfd_convert_to_cpu((u32 *)data, 4 * count);
-
-	for (i = 0; i < count; i++) {
-		seq_printf(file, "Reg 0x%03x = 0x%08x\n",
-			   MCP25XXFD_OSC + 4 * i,
-			   ((u32 *)data)[i]);
-	}
-
-	return 0;
-}
-
 #if defined(CONFIG_DEBUG_FS)
 static void mcp25xxfd_debugfs_add(struct mcp25xxfd_priv *priv)
 {
@@ -4155,7 +4116,6 @@ static void mcp25xxfd_debugfs_remove(struct mcp25xxfd_priv *priv)
 #else
 static void mcp25xxfd_debugfs_add(struct mcp25xxfd_priv *priv)
 {
-	return 0;
 }
 
 static void mcp25xxfd_debugfs_remove(struct mcp25xxfd_priv *priv)
