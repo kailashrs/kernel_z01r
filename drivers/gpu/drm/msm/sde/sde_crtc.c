@@ -658,53 +658,6 @@ static void _sde_crtc_deinit_events(struct sde_crtc *sde_crtc)
 		return;
 }
 
-static int _sde_debugfs_fps_status_show(struct seq_file *s, void *data)
-{
-	struct sde_crtc *sde_crtc;
-	u64 fps_int, fps_float;
-	ktime_t current_time_us;
-	u64 fps, diff_us;
-
-	if (!s || !s->private) {
-		SDE_ERROR("invalid input param(s)\n");
-		return -EAGAIN;
-	}
-
-	sde_crtc = s->private;
-
-	current_time_us = ktime_get();
-	diff_us = (u64)ktime_us_delta(current_time_us,
-			sde_crtc->fps_info.last_sampled_time_us);
-
-	if (diff_us >= DEFAULT_FPS_PERIOD_1_SEC) {
-
-		 /* Multiplying with 10 to get fps in floating point */
-		fps = ((u64)sde_crtc->fps_info.frame_count)
-						* DEFAULT_FPS_PERIOD_1_SEC * 10;
-		do_div(fps, diff_us);
-		sde_crtc->fps_info.measured_fps = (unsigned int)fps;
-		sde_crtc->fps_info.last_sampled_time_us = current_time_us;
-		sde_crtc->fps_info.frame_count = 0;
-		SDE_DEBUG("Measured FPS for crtc%d is %d.%d\n",
-				sde_crtc->base.base.id, (unsigned int)fps/10,
-				(unsigned int)fps%10);
-	}
-
-	fps_int = (unsigned int) sde_crtc->fps_info.measured_fps;
-	fps_float = do_div(fps_int, 10);
-
-	seq_printf(s, "fps: %llu.%llu\n", fps_int, fps_float);
-
-	return 0;
-}
-
-
-static int _sde_debugfs_fps_status(struct inode *inode, struct file *file)
-{
-	return single_open(file, _sde_debugfs_fps_status_show,
-			inode->i_private);
-}
-
 static ssize_t set_fps_periodicity(struct device *device,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
