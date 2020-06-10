@@ -15,12 +15,6 @@ focaltech_ft8716f-objs	 := focaltech_core.o \
 
 focaltech_ft8716f-objs	 += focaltech_flash/focaltech_upgrade_ft8716.o
 
-focaltech_ft8716f-objs	 += focaltech_test/focaltech_test.o \
-							focaltech_test/focaltech_test_ini.o \
-							focaltech_test/focaltech_test_detail_threshold.o \
-							focaltech_test/supported_ic/focaltech_test_ft8716.o
-
-
 #obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_core.o
 #obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_ex_fun.o
 #obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_ex_mode.o
@@ -30,4 +24,3 @@ focaltech_ft8716f-objs	 += focaltech_test/focaltech_test.o \
 #obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_i2c.o
 #obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_point_report_check.o
 #obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_flash/
-#obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_test/
