@@ -4052,8 +4052,6 @@ QDF_STATUS ol_register_peer_recovery_notifier(struct ol_txrx_peer_t *peer)
  */
 void peer_unmap_timer_handler(void *data)
 {
-	ol_register_peer_recovery_notifier(peer);
-
 	cds_trigger_recovery(QDF_PEER_UNMAP_TIMEDOUT);
 }
 
