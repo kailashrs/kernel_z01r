@@ -557,9 +557,6 @@ struct wlan_lmac_if_reg_tx_ops {
 			struct wlan_objmgr_psoc *psoc, void *arg);
 	QDF_STATUS (*unregister_ch_avoid_event_handler)(
 			struct wlan_objmgr_psoc *psoc, void *arg);
-
-	QDF_STATUS (*send_ctl_info)(struct wlan_objmgr_psoc *psoc,
-				    struct reg_ctl_params *params);
 };
 
 /**
@@ -798,12 +795,6 @@ struct wlan_lmac_if_mgmt_txrx_rx_ops {
 			struct wlan_objmgr_pdev *pdev);
 };
 
-/**
- * struct wlan_lmac_if_reg_rx_ops  -  structure of rx function
- *		pointers for regulatory component
- * @reg_ignore_fw_reg_offload_ind: Function pointer to check if
- *		needs to be ignored
- */
 struct wlan_lmac_if_reg_rx_ops {
 	QDF_STATUS (*master_list_handler)(struct cur_regulatory_info
 					  *reg_info);
@@ -826,8 +817,6 @@ struct wlan_lmac_if_reg_rx_ops {
 			uint16_t regdmn);
 	QDF_STATUS (*reg_get_current_regdomain)(struct wlan_objmgr_pdev *pdev,
 			struct cur_regdmn_info *cur_regdmn);
-	bool (*reg_ignore_fw_reg_offload_ind)(struct wlan_objmgr_psoc *psoc);
-
 };
 
 #ifdef CONVERGED_P2P_ENABLE
