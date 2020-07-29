@@ -40,7 +40,6 @@
 #endif
 
 #include <linux/proc_fs.h>  //add touch test node
-#include <linux/wakelock.h> //add wake lock
 
 /*****************************************************************************
 * Private constant and macro definitions using #define
@@ -79,7 +78,7 @@ static void fts_release_all_finger(void);
 static int fts_ts_suspend(struct device *dev);
 static int fts_ts_resume(struct device *dev);
 //add wake lock +++
-static struct wake_lock fts_wakelock;
+static struct wakeup_source fts_wakelock;
 #define WAKELOCK_HOLD_TIME 200
 //add wake lock ---
 //<ASUS-BSP> add touch test node ++++++
@@ -991,7 +990,7 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
 #endif
 
     //add wake lock
-    wake_lock_timeout(&fts_wakelock, msecs_to_jiffies(WAKELOCK_HOLD_TIME));
+    __pm_wakeup_event(&fts_wakelock, WAKELOCK_HOLD_TIME);
 
     ret = fts_read_touchdata(ts_data);
     if (likely(ret == 0)) {
@@ -1618,7 +1617,7 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
     register_early_suspend(&ts_data->early_suspend);
 #endif
 	//add wake lock
-	wake_lock_init(&fts_wakelock, WAKE_LOCK_SUSPEND, "fts_wakelock");
+    wakeup_source_init(&fts_wakelock, "fts_wakelock");
     FTS_FUNC_EXIT();
     return 0;
 
@@ -1673,7 +1672,7 @@ static int fts_ts_remove(struct i2c_client *client)
 
     FTS_FUNC_ENTER();
     //add wake lock
-	wake_lock_destroy(&fts_wakelock);
+    wakeup_source_trash(&fts_wakelock);
 #if FTS_POINT_REPORT_CHECK_EN
     fts_point_report_check_exit(ts_data);
 #endif
