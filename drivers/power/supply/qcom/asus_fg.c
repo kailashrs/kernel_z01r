@@ -126,7 +126,7 @@ static struct BAT_HEALTH_DATA_BACKUP g_bat_health_data_backup[BAT_HEALTH_NUMBER_
 
 struct delayed_work battery_health_work;
 struct delayed_work battery_metadata_work;
-struct wake_lock bat_health_lock;
+struct wakeup_source bat_health_lock;
 //ASUS_BS battery health upgrade ---
 
 
@@ -1974,7 +1974,7 @@ void battery_health_data_reset(void){
 	g_bat_health_data.end_time = 0;
 	g_bathealth_trigger = false;
 	g_last_bathealth_trigger = false;
-	wake_unlock(&bat_health_lock);
+	__pm_relax(&bat_health_lock);
 }
 
 static int resotre_bat_health(void)
@@ -2143,7 +2143,7 @@ static void update_battery_health(struct fg_chip *chip){
 	fg_get_prop_capacity(chip, &bat_capacity);
 
 	if(bat_capacity == g_health_upgrade_start_level && g_bat_health_data.start_time == 0){
-		wake_lock(&bat_health_lock);
+		__pm_stay_awake(&bat_health_lock);
 		g_bathealth_trigger = true;
 		rc = asus_qpnp_rtc_read_time(&g_bat_health_data.start_time);
 	    if (rc) {
@@ -2366,7 +2366,7 @@ static const struct file_operations batt_health_config_fops = {
 void asus_add_battery_health_fun(void)
 {
 	INIT_DELAYED_WORK(&battery_health_work, battery_health_worker); //battery_health_work
-	wake_lock_init(&bat_health_lock, WAKE_LOCK_SUSPEND, "bat_health_lock");
+	wakeup_source_init(&bat_health_lock, "bat_health_lock");
 	battery_health_data_reset();
 	schedule_delayed_work(&battery_health_work, 60 * HZ);
 }
