@@ -575,8 +575,8 @@ static void pm_qos_irq_notify(struct irq_affinity_notify *notify,
  * removal.
  */
 
-void pm_qos_add_request(struct pm_qos_request *req,
-			int pm_qos_class, s32 value)
+void pm_qos_add_request_special(struct pm_qos_request *req,
+			int pm_qos_class, s32 value, const char* str)
 {
 	if (!req) /*guard against callers passing in null */
 		return;
@@ -585,6 +585,8 @@ void pm_qos_add_request(struct pm_qos_request *req,
 		WARN(1, KERN_ERR "pm_qos_add_request() called for already added request\n");
 		return;
 	}
+
+	pr_info("AAAA: pm_qos_add_request called by: %s\n", str);
 
 	switch (req->type) {
 	case PM_QOS_REQ_AFFINE_CORES:
@@ -650,7 +652,7 @@ void pm_qos_add_request(struct pm_qos_request *req,
 	}
 #endif
 }
-EXPORT_SYMBOL_GPL(pm_qos_add_request);
+EXPORT_SYMBOL_GPL(pm_qos_add_request_special);
 
 /**
  * pm_qos_update_request - modifies an existing qos request
