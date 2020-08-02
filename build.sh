@@ -1,3 +1,5 @@
+export KBUILD_BUILD_USER="spac3b0y"
+export KBUILD_BUILD_HOST="TheHurtlocker"
 make clean
 export ARCH="arm64"
 export PATH="/usr/lib/ccache/bin:$PATH"
