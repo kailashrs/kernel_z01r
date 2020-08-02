@@ -664,8 +664,8 @@ EXPORT_SYMBOL_GPL(pm_qos_add_request_special);
  *
  * Attempts are made to make this code callable on hot code paths.
  */
-void pm_qos_update_request_special(struct pm_qos_request *req,
-			   s32 new_value, const char* str)
+void pm_qos_update_request(struct pm_qos_request *req,
+			   s32 new_value)
 {
 	if (!req) /*guard against callers passing in null */
 		return;
@@ -674,8 +674,6 @@ void pm_qos_update_request_special(struct pm_qos_request *req,
 		WARN(1, KERN_ERR "pm_qos_update_request() called for unknown object\n");
 		return;
 	}
-
-	pr_info("REEEEE: pm_qos_update_request called by: %s\n", str);
 
 	/*
 	 * This function may be called very early during boot, for example,
@@ -689,7 +687,7 @@ void pm_qos_update_request_special(struct pm_qos_request *req,
 
 	__pm_qos_update_request(req, new_value);
 }
-EXPORT_SYMBOL_GPL(pm_qos_update_request_special);
+EXPORT_SYMBOL_GPL(pm_qos_update_request);
 
 /**
  * pm_qos_update_request_timeout - modifies an existing qos request temporarily.
