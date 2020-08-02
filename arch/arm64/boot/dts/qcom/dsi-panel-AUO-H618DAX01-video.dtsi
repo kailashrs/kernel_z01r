@@ -52,7 +52,6 @@
 		qcom,mdss-dsi-panel-peak-brightness = <5000000>;
 		qcom,mdss-dsi-panel-blackness-level = <3300>;
 		qcom,ulps-enabled;
-		qcom,suspend-ulps-enabled;
 
 		qcom,mdss-dsi-display-timings {
 			timing@0{
