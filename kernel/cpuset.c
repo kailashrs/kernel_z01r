@@ -1789,7 +1789,7 @@ static ssize_t cpuset_write_resmask_wrapper(struct kernfs_open_file *of,
 	static struct cs_target cs_targets[] = {
 		/* Little-only cpusets go first */
 		{ "background",		"0-1"},
-		{ "audio-app",		"0-3"},
+		{ "audio-app",		"1-2"},
 		{ "system-background", 	"0-3"},
 		{ "restricted",		"0-3"},
 		{ "top-app",		"0-7"},
