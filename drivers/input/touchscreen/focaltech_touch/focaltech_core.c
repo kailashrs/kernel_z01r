@@ -991,7 +991,7 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
 #endif
 
     //add wake lock
-    wake_lock_timeout(&fts_wakelock, msecs_to_jiffies(WAKELOCK_HOLD_TIME));
+    wake_lock_timeout(&fts_wakelock, WAKELOCK_HOLD_TIME);
 
     ret = fts_read_touchdata(ts_data);
     if (likely(ret == 0)) {
