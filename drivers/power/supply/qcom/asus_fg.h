@@ -1,6 +1,8 @@
 #ifndef __ASUS_FG_H
 #define __ASUS_FG_H
 
+#include <linux/wakelock.h>
+
 #define BATTERY_TAG "[BAT][BMS]"
 #define ERROR_TAG "[ERR]"
 #define BAT_DBG(...)  printk(KERN_INFO BATTERY_TAG __VA_ARGS__)
