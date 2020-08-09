@@ -5,8 +5,8 @@ export KBUILD_BUILD_HOST="TheHurtlocker"
 
 export ARCH="arm64"
 
-export CROSS_COMPILE="ccache $HOME/5z/arm64-gcc/bin/aarch64-elf-"
-export CROSS_COMPILE_ARM32="ccache $HOME/5z/arm32-gcc/bin/arm-eabi-"
+export CROSS_COMPILE="ccache aarch64-linux-gnu-"
+export CROSS_COMPILE_ARM32="ccache arm-none-eabi-"
 
 export objdir="out/arch/arm64/boot"
 
