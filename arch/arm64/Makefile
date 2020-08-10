@@ -82,6 +82,14 @@ ifeq ($(CONFIG_COMPAT_VDSO), y)
   endif
 endif
 
+ifeq ($(CONFIG_ARCH_SDM845), y)
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS   += -mcpu=cortex-a55+crypto -mtune=cortex-a55
+else ifeq ($(cc-name),gcc)
+KBUILD_CFLAGS   += -mcpu=cortex-a75.cortex-a55+crypto -mtune=cortex-a75.cortex-a55
+endif
+endif
+
 KBUILD_CFLAGS	+= -mgeneral-regs-only $(lseinstr) $(vdso32)
 KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
 KBUILD_CFLAGS	+= $(call cc-option, -mpc-relative-literal-loads)
