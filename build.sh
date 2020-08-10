@@ -8,7 +8,9 @@ export ARCH="arm64"
 export CROSS_COMPILE="ccache aarch64-linux-gnu-"
 export CROSS_COMPILE_ARM32="ccache arm-none-eabi-"
 
-export objdir="out/arch/arm64/boot"
+workdir="$HOME/5z"
+srcdir="$HOME/5z/msm-4.9"
+objdir="$srcdir/out/arch/arm64/boot"
 
 build() {
  make clean
@@ -31,14 +33,14 @@ name_zip() {
 }
 
 package() {
- cd $HOME/5z/AnyKernel3
+ cd $workdir/AnyKernel3
 
  rm dtbo.img
  rm *.zip
 
- python2 $HOME/5z/mkdtboimg.py create dtbo.img $HOME/5z/msm-4.9/$objdir/dts/qcom/*.dtbo
+ python2 $workdir/mkdtboimg.py create dtbo.img $objdir/dts/qcom/*.dtbo
 
- cp $HOME/5z/msm-4.9/$objdir/Image.gz-dtb zImage
+ cp $objdir/Image.gz-dtb zImage
 
  zip -r $zipname.zip *
 }
