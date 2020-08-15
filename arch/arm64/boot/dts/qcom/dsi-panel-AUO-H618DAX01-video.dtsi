@@ -200,10 +200,10 @@
 					// CABC OFF mode
 					39 01 00 00 00 00 02 53 24
 					39 01 00 00 00 00 02 55 00
-					/* Sleep Out, delay > 120ms */
-					39 01 00 00 7F 00 01 11
-					/* Display on, delay > 30ms*/
-					39 01 00 00 1F 00 01 29];
+					/* Sleep Out, delay 1ms */
+					39 01 00 00 01 00 01 11
+					/* Display on, delay 1ms */
+					39 01 00 00 01 00 01 29];
 				qcom,mdss-dsi-cabc-on-ui-command = [
 					// CMD2 mode on
 					39 01 00 00 00 00 02 00 00
