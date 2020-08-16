@@ -997,7 +997,12 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
     if (likely(ret == 0)) {
     	  mutex_lock(&ts_data->report_mutex);
 #if FTS_MT_PROTOCOL_B_EN
+    	  /* prevent CPU from entering deep sleep */
+    	  pm_qos_update_request(&ts_data->pm_qos_req, 100);
+
     	  fts_input_report_b(data);
+
+    	  pm_qos_update_request(&ts_data->pm_qos_req, PM_QOS_DEFAULT_VALUE);
 #else
     	  fts_input_report_a(data);
 #endif
@@ -1578,6 +1583,11 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
     }
 #endif
 
+    ts_data->pm_qos_req.type = PM_QOS_REQ_AFFINE_IRQ;
+    ts_data->pm_qos_req.irq = ts_data->irq;
+    pm_qos_add_request(&ts_data->pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
+			   PM_QOS_DEFAULT_VALUE);
+
     ret = fts_irq_registration(ts_data);
     if (ret) {
         FTS_ERROR("request irq failed");
@@ -1708,6 +1718,8 @@ static int fts_ts_remove(struct i2c_client *client)
 #endif
 
     free_irq(client->irq, ts_data);
+    pm_qos_remove_request(&ts_data->pm_qos_req);
+
     input_unregister_device(ts_data->input_dev);
 
     if (gpio_is_valid(ts_data->pdata->reset_gpio))
