@@ -66,6 +66,7 @@
 #include <linux/ioctl.h>
 #include <linux/vmalloc.h>
 #include "focaltech_common.h"
+#include <linux/pm_qos.h>
 
 /*****************************************************************************
 * Private constant and macro definitions using #define
@@ -165,6 +166,7 @@ struct fts_ts_data {
 #elif defined(CONFIG_HAS_EARLYSUSPEND)
     struct early_suspend early_suspend;
 #endif
+    struct pm_qos_request pm_qos_req;
 //ASUS_BSP add touch resume/suspend workqueue +++
 	struct workqueue_struct *tp_suspend_resume_wk;
 	struct work_struct touch_resume_work;

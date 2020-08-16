@@ -989,6 +989,9 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
     fts_esdcheck_set_intr(1);
 #endif
 
+    /* prevent CPU from entering deep sleep */
+    pm_qos_update_request(&ts_data->pm_qos_req, 100);
+
     //add wake lock
     __pm_wakeup_event(&fts_wakelock, WAKELOCK_HOLD_TIME);
 
@@ -1002,6 +1005,8 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
 #endif
     	  mutex_unlock(&ts_data->report_mutex);
     }
+
+    pm_qos_update_request(&ts_data->pm_qos_req, PM_QOS_DEFAULT_VALUE);
 
 #if FTS_ESDCHECK_EN
     fts_esdcheck_set_intr(0);
@@ -1030,6 +1035,12 @@ static int fts_irq_registration(struct fts_ts_data *ts_data)
     if (0 == pdata->irq_gpio_flags)
         pdata->irq_gpio_flags = IRQF_TRIGGER_FALLING;
     FTS_INFO("irq flag:%x", pdata->irq_gpio_flags);
+
+    ts_data->pm_qos_req.type = PM_QOS_REQ_AFFINE_IRQ;
+    ts_data->pm_qos_req.irq = ts_data->irq;
+    pm_qos_add_request(&ts_data->pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
+			   PM_QOS_DEFAULT_VALUE);
+
     ret = request_threaded_irq(ts_data->irq, NULL, fts_ts_interrupt,
                                pdata->irq_gpio_flags | IRQF_ONESHOT,
                                ts_data->client->name, ts_data);
@@ -1707,6 +1718,8 @@ static int fts_ts_remove(struct i2c_client *client)
 #endif
 
     free_irq(client->irq, ts_data);
+    pm_qos_remove_request(&ts_data->pm_qos_req);
+
     input_unregister_device(ts_data->input_dev);
 
     if (gpio_is_valid(ts_data->pdata->reset_gpio))
