@@ -1042,7 +1042,7 @@ static int fts_irq_registration(struct fts_ts_data *ts_data)
 			   PM_QOS_DEFAULT_VALUE);
 
     ret = request_threaded_irq(ts_data->irq, NULL, fts_ts_interrupt,
-                               pdata->irq_gpio_flags | IRQF_ONESHOT,
+                               pdata->irq_gpio_flags | IRQF_ONESHOT | IRQF_PERF_CRITICAL,
                                ts_data->client->name, ts_data);
 
     return ret;
