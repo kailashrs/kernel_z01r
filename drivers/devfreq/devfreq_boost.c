@@ -31,6 +31,7 @@ struct boost_dev {
 struct df_boost_drv {
 	struct boost_dev devices[DEVFREQ_MAX];
 	struct notifier_block msm_drm_notif;
+	unsigned long last_input_jiffies;
 };
 
 static void devfreq_input_unboost(struct work_struct *work);
@@ -54,6 +55,17 @@ static struct df_boost_drv df_boost_drv_g __read_mostly = {
 	BOOST_DEV_INIT(df_boost_drv_g, DEVFREQ_MSM_LLCCBW,
 		       CONFIG_DEVFREQ_MSM_LLCCBW_BOOST_FREQ)
 };
+
+bool should_kick_frame_boost(unsigned long timeout_ms)
+{
+	struct df_boost_drv *d = &df_boost_drv_g;
+
+	if (!d)
+		return true;
+
+	return time_before(jiffies, d->last_input_jiffies +
+			   msecs_to_jiffies(timeout_ms));
+}
 
 static void __devfreq_boost_kick(struct boost_dev *b)
 {
@@ -217,6 +229,8 @@ static void devfreq_boost_input_event(struct input_handle *handle,
 
 	for (i = 0; i < DEVFREQ_MAX; i++)
 		__devfreq_boost_kick(d->devices + i);
+
+	d->last_input_jiffies = jiffies;
 }
 
 static int devfreq_boost_input_connect(struct input_handler *handler,
@@ -317,6 +331,7 @@ static int __init devfreq_boost_init(void)
 		goto stop_kthreads;
 	}
 
+	d->last_input_jiffies = jiffies;
 	d->msm_drm_notif.notifier_call = msm_drm_notifier_cb;
 	d->msm_drm_notif.priority = INT_MAX;
 	ret = msm_drm_register_client(&d->msm_drm_notif);
