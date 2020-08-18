@@ -315,7 +315,6 @@ endif # DRM_LEGACY
 
 config DRM_FRAME_BOOST_TIMEOUT
 	int "Post-input frame boost timeout"
-	depends on CPU_INPUT_BOOST
 	default "3250"
 	help
 	  The timeout in milliseconds during which we boost the CPU and DDR bus
