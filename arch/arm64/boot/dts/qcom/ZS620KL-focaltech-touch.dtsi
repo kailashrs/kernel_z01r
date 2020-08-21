@@ -1,6 +1,7 @@
 // ASUS_BSP_Touch +++
 &qupv3_se5_i2c {
 	status = "ok";
+	qcom,clk-freq-out = <1000000>;
 	focaltech@38 {
 		compatible = "focaltech,fts";
 		reg = <0x38>;
