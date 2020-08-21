@@ -41,6 +41,8 @@
 
 #include <linux/proc_fs.h>  //add touch test node
 
+#include <linux/i2c/i2c-msm-v2.h>
+
 /*****************************************************************************
 * Private constant and macro definitions using #define
 *****************************************************************************/
@@ -990,7 +992,8 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
 #endif
 
     /* prevent CPU from entering deep sleep */
-    pm_qos_update_request(&ts_data->pm_qos_req, 100);
+    pm_qos_update_request(&ts_data->pm_touch_req, 100);
+    pm_qos_update_request(&ts_data->pm_i2c_req, 100);
 
     //add wake lock
     __pm_wakeup_event(&fts_wakelock, WAKELOCK_HOLD_TIME);
@@ -1006,7 +1009,8 @@ static irqreturn_t fts_ts_interrupt(int irq, void *data)
     	  mutex_unlock(&ts_data->report_mutex);
     }
 
-    pm_qos_update_request(&ts_data->pm_qos_req, PM_QOS_DEFAULT_VALUE);
+    pm_qos_update_request(&ts_data->pm_i2c_req, PM_QOS_DEFAULT_VALUE);
+    pm_qos_update_request(&ts_data->pm_touch_req, PM_QOS_DEFAULT_VALUE);
 
 #if FTS_ESDCHECK_EN
     fts_esdcheck_set_intr(0);
@@ -1036,9 +1040,9 @@ static int fts_irq_registration(struct fts_ts_data *ts_data)
         pdata->irq_gpio_flags = IRQF_TRIGGER_FALLING;
     FTS_INFO("irq flag:%x", pdata->irq_gpio_flags);
 
-    ts_data->pm_qos_req.type = PM_QOS_REQ_AFFINE_IRQ;
-    ts_data->pm_qos_req.irq = ts_data->irq;
-    pm_qos_add_request(&ts_data->pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
+    ts_data->pm_touch_req.type = PM_QOS_REQ_AFFINE_IRQ;
+    ts_data->pm_touch_req.irq = ts_data->irq;
+    pm_qos_add_request(&ts_data->pm_touch_req, PM_QOS_CPU_DMA_LATENCY,
 			   PM_QOS_DEFAULT_VALUE);
 
     ret = request_threaded_irq(ts_data->irq, NULL, fts_ts_interrupt,
@@ -1448,8 +1452,10 @@ static void fts_ts_late_resume(struct early_suspend *handler)
 static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
     int ret = 0;
+    unsigned int i2c_irq;
     struct fts_ts_platform_data *pdata;
     struct fts_ts_data *ts_data;
+    struct i2c_msm_ctrl *ctrl;
 
     FTS_FUNC_ENTER();
     FTS_ERROR("dsi_panel_id is %s, size %d", dsi_panel_id, (int)sizeof(TOUCH_PANEL_ID));
@@ -1588,6 +1594,14 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
     }
 #endif
 
+    ctrl = client->dev.parent->driver_data;
+    irq_set_perf_affinity(ctrl->rsrcs.irq);
+
+    ts_data->pm_i2c_req.type = PM_QOS_REQ_AFFINE_IRQ;
+    ts_data->pm_i2c_req.irq = ctrl->rsrcs.irq;
+    pm_qos_add_request(&ts_data->pm_i2c_req, PM_QOS_CPU_DMA_LATENCY,
+			   PM_QOS_DEFAULT_VALUE);
+
     ret = fts_irq_registration(ts_data);
     if (ret) {
         FTS_ERROR("request irq failed");
@@ -1718,7 +1732,8 @@ static int fts_ts_remove(struct i2c_client *client)
 #endif
 
     free_irq(client->irq, ts_data);
-    pm_qos_remove_request(&ts_data->pm_qos_req);
+    pm_qos_remove_request(&ts_data->pm_touch_req);
+    pm_qos_remove_request(&ts_data->pm_i2c_req);
 
     input_unregister_device(ts_data->input_dev);
 
