@@ -176,14 +176,6 @@ static qdf_notif_block ol_peer_recovery_notifier = {
 };
 
 static
-QDF_STATUS ol_register_peer_recovery_notifier(struct ol_txrx_peer_t *peer)
-{
-	ol_peer_recovery_notifier.priv_data = peer;
-
-	return qdf_hang_event_register_notifier(&ol_peer_recovery_notifier);
-}
-
-static
 QDF_STATUS ol_unregister_peer_recovery_notifier(void)
 {
 	return qdf_hang_event_unregister_notifier(&ol_peer_recovery_notifier);
