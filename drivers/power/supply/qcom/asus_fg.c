@@ -740,7 +740,7 @@ restart:
 
 	pr_err("%s adc(%d), g_wp_state(%d), low_thr(%d), high_thr(%d), state_request(%d)\n", __func__, adc, g_wp_state, g_adc_param.low_thr, g_adc_param.high_thr, g_adc_param.state_request);
 	g_adc_param.channel = 0x76;
-	g_adc_param.timer_interval = ADC_MEAS2_INTERVAL_1S;
+	g_adc_param.timer_interval = ADC_MEAS1_INTERVAL_1S;
 	g_adc_param.btm_ctx = chip;
 	g_adc_param.threshold_notification = vadc_notification;
 	rc = qpnp_adc_tm_channel_measure(g_adc_tm_dev, &g_adc_param);
