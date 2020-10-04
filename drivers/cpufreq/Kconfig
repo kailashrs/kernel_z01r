@@ -306,23 +306,11 @@ config TA_STUNE_BOOST
 	  SchedTune boost value for the foreground app. This alters the
 	  perceived load in order to bias CPU and frequency selection.
 
-config MAX_BOOST_FREQ_LP
-	int "Low-power cluster max-boost freq"
-	default "0"
-	help
-	  Max-boost frequency for the low-power CPU cluster.
-
 config MAX_BOOST_FREQ_PERF
 	int "Performance cluster max-boost freq"
 	default "0"
 	help
 	  Max-boost frequency for the performance CPU cluster.
-
-config MIN_FREQ_LP
-	int "Low-power cluster minimum frequency"
-	default "0"
-	help
-	  This is the minimum frequency for the low-power cluster.
 
 config MIN_FREQ_PERF
 	int "Performance cluster minimum frequency"

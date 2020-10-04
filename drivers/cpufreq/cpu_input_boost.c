@@ -19,12 +19,8 @@
 #include <uapi/linux/sched/types.h>
 #endif
 
-static unsigned int max_boost_freq_lp __read_mostly =
-	CONFIG_MAX_BOOST_FREQ_LP;
 static unsigned int max_boost_freq_hp __read_mostly =
 	CONFIG_MAX_BOOST_FREQ_PERF;
-static unsigned int min_freq_lp __read_mostly =
-	CONFIG_MIN_FREQ_LP;
 static unsigned int min_freq_perf __read_mostly =
 	CONFIG_MIN_FREQ_PERF;
 
@@ -33,9 +29,7 @@ static unsigned short input_boost_duration __read_mostly =
 static unsigned short wake_boost_duration __read_mostly =
 	CONFIG_WAKE_BOOST_DURATION_MS;
 
-module_param(max_boost_freq_lp, uint, 0644);
 module_param(max_boost_freq_hp, uint, 0644);
-module_param(min_freq_lp, uint, 0644);
 module_param(min_freq_perf, uint, 0644);
 
 module_param(input_boost_duration, short, 0644);
@@ -82,9 +76,7 @@ static unsigned int get_max_boost_freq(struct cpufreq_policy *policy)
 {
 	unsigned int freq;
 
-	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		freq = max_boost_freq_lp;
-	else
+	if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
 		freq = max_boost_freq_hp;
 
 	return min(freq, policy->max);
@@ -94,9 +86,7 @@ static unsigned int get_min_freq(struct cpufreq_policy *policy)
 {
 	unsigned int freq;
 
-	if (cpumask_test_cpu(policy->cpu, cpu_lp_mask))
-		freq = min_freq_lp;
-	else
+	if (cpumask_test_cpu(policy->cpu, cpu_perf_mask))
 		freq = min_freq_perf;
 
 	return max(freq, policy->cpuinfo.min_freq);
@@ -108,8 +98,6 @@ static void update_online_cpu_policy(void)
 
 	/* Only one CPU from each cluster needs to be updated */
 	get_online_cpus();
-	cpu = cpumask_first_and(cpu_lp_mask, cpu_online_mask);
-	cpufreq_update_policy(cpu);
 	cpu = cpumask_first_and(cpu_perf_mask, cpu_online_mask);
 	cpufreq_update_policy(cpu);
 	put_online_cpus();
