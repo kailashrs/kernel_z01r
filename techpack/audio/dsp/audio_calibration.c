@@ -1,4 +1,4 @@
-/* Copyright (c) 2014, 2016-2017 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014, 2016-2017, 2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -745,6 +745,8 @@ static int __init audio_cal_init(void)
 	int ret =0;
 
 	pr_debug("%s\n", __func__);
+
+	cal_utils_init();
 	//ASUS_BSP++
 	audiowizard = input_allocate_device();
 	if(!audiowizard)
