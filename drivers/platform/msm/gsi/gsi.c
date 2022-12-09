@@ -1886,7 +1886,7 @@ int gsi_alloc_channel(struct gsi_chan_props *props, unsigned long dev_hdl,
 EXPORT_SYMBOL(gsi_alloc_channel);
 
 static void __gsi_read_channel_scratch(unsigned long chan_hdl,
-		union __packed gsi_channel_scratch * val)
+		union gsi_channel_scratch * val)
 {
 	uint32_t reg;
 
@@ -1912,7 +1912,7 @@ static void __gsi_read_channel_scratch(unsigned long chan_hdl,
 }
 
 static void __gsi_write_channel_scratch(unsigned long chan_hdl,
-		union __packed gsi_channel_scratch val)
+		union gsi_channel_scratch val)
 {
 	uint32_t reg;
 
@@ -1939,7 +1939,7 @@ static void __gsi_write_channel_scratch(unsigned long chan_hdl,
 }
 
 int gsi_write_channel_scratch(unsigned long chan_hdl,
-		union __packed gsi_channel_scratch val)
+		union gsi_channel_scratch val)
 {
 	struct gsi_chan_ctx *ctx;
 
@@ -1972,7 +1972,7 @@ int gsi_write_channel_scratch(unsigned long chan_hdl,
 EXPORT_SYMBOL(gsi_write_channel_scratch);
 
 int gsi_read_channel_scratch(unsigned long chan_hdl,
-	union __packed gsi_channel_scratch * ch_scratch)
+	union gsi_channel_scratch * ch_scratch)
 {
 	struct gsi_chan_ctx *ctx;
 
